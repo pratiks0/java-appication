@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,17 +25,25 @@ public class CourseController {
 
     /**
      * Display list of all courses
+     * Everyone can view (even regular users)
      */
     @GetMapping
     public String listCourses(Model model) {
-        model.addAttribute("courses", courseService.getAllCourses());
-        return "courses";
+        try {
+            model.addAttribute("courses", courseService.getAllCourses());
+            return "courses";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Error loading courses: " + e.getMessage());
+            return "courses";
+        }
     }
 
     /**
      * Show form for adding a new course
+     * ADMIN ONLY
      */
     @GetMapping("/form")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showAddForm(Model model) {
         model.addAttribute("course", new CourseDto());
         return "course-form";
@@ -42,49 +51,54 @@ public class CourseController {
 
     /**
      * Show form for editing an existing course
+     * ADMIN ONLY
      */
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Course course = courseService.getCourseById(id);
-        
-        CourseDto dto = new CourseDto();
-        dto.setTitle(course.getTitle());
-        
-        model.addAttribute("course", dto);
-        model.addAttribute("courseId", id);
-        return "course-form";
+    @PreAuthorize("hasRole('ADMIN')")
+    public String showEditForm(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Course course = courseService.getCourseById(id);
+            
+            CourseDto dto = new CourseDto();
+            dto.setId(course.getId());
+            dto.setTitle(course.getTitle());
+            
+            model.addAttribute("course", dto);
+            return "course-form";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error loading course: " + e.getMessage());
+            return "redirect:/courses";
+        }
     }
 
     /**
      * Save or update course
+     * ADMIN ONLY
      */
     @PostMapping("/save")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveCourse(@Valid @ModelAttribute("course") CourseDto dto,
                             BindingResult result,
-                            @RequestParam(required = false) Long courseId,
                             RedirectAttributes redirectAttributes,
                             Model model) {
         
         if (result.hasErrors()) {
-            if (courseId != null) {
-                model.addAttribute("courseId", courseId);
-            }
             return "course-form";
         }
 
         try {
-            Course course = new Course();
-            course.setTitle(dto.getTitle());
-            
-            if (courseId != null) {
-                // Update existing
-                courseService.updateCourse(courseId, course);
-                redirectAttributes.addFlashAttribute("successMessage", "Course updated successfully!");
+            Course course;
+            if (dto.getId() != null) {
+                course = courseService.getCourseById(dto.getId());
+                course.setTitle(dto.getTitle());
             } else {
-                // Create new
-                courseService.saveCourse(course);
-                redirectAttributes.addFlashAttribute("successMessage", "Course created successfully!");
+                course = new Course(dto.getTitle());
             }
+            
+            courseService.saveCourse(course);
+            
+            redirectAttributes.addFlashAttribute("successMessage", 
+                dto.getId() != null ? "Course updated successfully!" : "Course created successfully!");
             
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", 
@@ -96,8 +110,10 @@ public class CourseController {
 
     /**
      * Delete course
+     * ADMIN ONLY
      */
     @GetMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteCourse(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             courseService.deleteCourse(id);

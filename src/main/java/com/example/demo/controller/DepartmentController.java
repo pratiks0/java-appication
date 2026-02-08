@@ -1,5 +1,6 @@
 package com.example.demo.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,17 +25,25 @@ public class DepartmentController {
 
     /**
      * Display list of all departments
+     * Everyone can view (even regular users)
      */
     @GetMapping
     public String listDepartments(Model model) {
-        model.addAttribute("departments", departmentService.getAllDepartments());
-        return "departments";
+        try {
+            model.addAttribute("departments", departmentService.getAllDepartments());
+            return "departments";
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "Error loading departments: " + e.getMessage());
+            return "departments";
+        }
     }
 
     /**
      * Show form for adding a new department
+     * ADMIN ONLY
      */
     @GetMapping("/form")
+    @PreAuthorize("hasRole('ADMIN')")
     public String showAddForm(Model model) {
         model.addAttribute("department", new DepartmentDto());
         return "department-form";
@@ -42,49 +51,54 @@ public class DepartmentController {
 
     /**
      * Show form for editing an existing department
+     * ADMIN ONLY
      */
     @GetMapping("/edit/{id}")
-    public String showEditForm(@PathVariable Long id, Model model) {
-        Department department = departmentService.getDepartmentById(id);
-        
-        DepartmentDto dto = new DepartmentDto();
-        dto.setName(department.getName());
-        
-        model.addAttribute("department", dto);
-        model.addAttribute("departmentId", id);
-        return "department-form";
+    @PreAuthorize("hasRole('ADMIN')")
+    public String showEditForm(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+        try {
+            Department department = departmentService.getDepartmentById(id);
+            
+            DepartmentDto dto = new DepartmentDto();
+            dto.setId(department.getId());
+            dto.setName(department.getName());
+            
+            model.addAttribute("department", dto);
+            return "department-form";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Error loading department: " + e.getMessage());
+            return "redirect:/departments";
+        }
     }
 
     /**
      * Save or update department
+     * ADMIN ONLY
      */
     @PostMapping("/save")
+    @PreAuthorize("hasRole('ADMIN')")
     public String saveDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
                                 BindingResult result,
-                                @RequestParam(required = false) Long departmentId,
                                 RedirectAttributes redirectAttributes,
                                 Model model) {
         
         if (result.hasErrors()) {
-            if (departmentId != null) {
-                model.addAttribute("departmentId", departmentId);
-            }
             return "department-form";
         }
 
         try {
-            Department department = new Department();
-            department.setName(dto.getName());
-            
-            if (departmentId != null) {
-                // Update existing
-                departmentService.updateDepartment(departmentId, department);
-                redirectAttributes.addFlashAttribute("successMessage", "Department updated successfully!");
+            Department department;
+            if (dto.getId() != null) {
+                department = departmentService.getDepartmentById(dto.getId());
+                department.setName(dto.getName());
             } else {
-                // Create new
-                departmentService.saveDepartment(department);
-                redirectAttributes.addFlashAttribute("successMessage", "Department created successfully!");
+                department = new Department(dto.getName());
             }
+            
+            departmentService.saveDepartment(department);
+            
+            redirectAttributes.addFlashAttribute("successMessage", 
+                dto.getId() != null ? "Department updated successfully!" : "Department created successfully!");
             
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", 
@@ -96,8 +110,10 @@ public class DepartmentController {
 
     /**
      * Delete department
+     * ADMIN ONLY
      */
     @GetMapping("/delete/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteDepartment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             departmentService.deleteDepartment(id);
