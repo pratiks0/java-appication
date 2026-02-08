@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${student.id != null ? 'Edit Student' : 'Add Student'}">Student Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+            color: #e2e8f0;
+        }
+
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 48px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        h2 {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 40px;
+            color: #f1f5f9;
+            letter-spacing: -0.02em;
+        }
+
+        .section-title {
+            color: #60a5fa;
+            font-size: 18px;
+            font-weight: 600;
+            margin-top: 40px;
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(59, 130, 246, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #cbd5e1;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.01em;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(15, 23, 42, 0.5);
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            font-size: 15px;
+            color: #f1f5f9;
+            transition: all 0.3s ease;
+        }
+
+        input::placeholder {
+            color: #64748b;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            background: rgba(15, 23, 42, 0.7);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        .button-group {
+            margin-top: 40px;
+            display: flex;
+            gap: 12px;
+        }
+
+        button {
+            flex: 1;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 14px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .back-link {
+            flex: 1;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 14px 24px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: rgba(15, 23, 42, 0.3);
+        }
+
+        .back-link:hover {
+            background: rgba(15, 23, 42, 0.5);
+            border-color: rgba(148, 163, 184, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .help-text {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-top: 8px;
+            line-height: 1.5;
+        }
+
+        .help-text ul {
+            list-style: none;
+            margin-top: 8px;
+        }
+
+        .help-text li {
+            padding: 4px 0;
+        }
+
+        .error {
+            color: #fca5a5;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+
+        .quick-links {
+            background: rgba(59, 130, 246, 0.1);
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-top: 10px;
+            border: 1px solid rgba(59, 130, 246, 0.2);
+        }
+
+        .quick-links span {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-right: 12px;
+        }
+
+        .quick-links a {
+            color: #60a5fa;
+            text-decoration: none;
+            margin-right: 16px;
+            font-size: 13px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .quick-links a:hover {
+            color: #93c5fd;
+        }
+
+        @media (max-width: 640px) {
+            .form-container {
+                padding: 32px 24px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2 th:text="${student.id != null ? 'Edit Student' : 'Add New Student'}">Student Form</h2>
+
+        <form th:action="@{/students/save}" method="post" th:object="${student}">
+
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="form-group">
+                <label for="name">Name <span style="color: #f87171;">*</span></label>
+                <input type="text"
+                       id="name"
+                       th:field="*{name}"
+                       placeholder="Enter student name"
+                       required />
+                <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email <span style="color: #f87171;">*</span></label>
+                <input type="email"
+                       id="email"
+                       th:field="*{email}"
+                       placeholder="student@example.com"
+                       required />
+                <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
+
+            <h3 class="section-title">Profile Information</h3>
+
+            <div class="form-group">
+                <label for="address">Address</label>
+                <input type="text"
+                       id="address"
+                       th:field="*{address}"
+                       placeholder="Enter address" />
+            </div>
+
+            <div class="form-group">
+                <label for="phone">Phone</label>
+                <input type="text"
+                       id="phone"
+                       th:field="*{phone}"
+                       placeholder="Enter phone number" />
+            </div>
+
+            <h3 class="section-title">Department</h3>
+
+            <div class="form-group">
+                <label for="departmentId">Department</label>
+                <select id="departmentId" th:field="*{departmentId}">
+                    <option value="">-- Select Department --</option>
+                    <option th:each="dept : ${departments}"
+                            th:value="${dept.id}"
+                            th:text="${dept.name}">Department</option>
+                </select>
+                <div class="quick-links">
+                    <span>Quick Actions:</span>
+                    <a href="/departments/form" target="_blank">+ Add New Department</a>
+                    <a href="/departments" target="_blank">View All Departments</a>
+                </div>
+            </div>
+
+            <h3 class="section-title">Courses</h3>
+
+            <div class="form-group">
+                <label for="courseIds">Course IDs</label>
+                <input type="text"
+                       id="courseIds"
+                       th:field="*{courseIds}"
+                       placeholder="e.g., 1,2,3" />
+                <div class="help-text">Enter comma-separated course IDs</div>
+                <div class="help-text">Available courses:</div>
+                <ul class="help-text" style="margin-top: 5px;">
+                    <li th:each="course : ${courses}" th:text="${course.id + ' - ' + course.title}">Course</li>
+                </ul>
+                <div class="quick-links">
+                    <span>Quick Actions:</span>
+                    <a href="/courses/form" target="_blank">+ Add New Course</a>
+                    <a href="/courses" target="_blank">View All Courses</a>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="submit" th:text="${student.id != null ? 'Update Student' : 'Save Student'}">Save</button>
+                <a href="/students" class="back-link">Cancel</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
