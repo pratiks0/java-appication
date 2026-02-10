@@ -262,11 +262,6 @@
                             th:value="${dept.id}"
                             th:text="${dept.name}">Department</option>
                 </select>
-                <div class="quick-links">
-                    <span>Quick Actions:</span>
-                    <a href="/departments/form" target="_blank">+ Add New Department</a>
-                    <a href="/departments" target="_blank">View All Departments</a>
-                </div>
             </div>
 
             <h3 class="section-title">Courses</h3>
@@ -282,11 +277,6 @@
                 <ul class="help-text" style="margin-top: 5px;">
                     <li th:each="course : ${courses}" th:text="${course.id + ' - ' + course.title}">Course</li>
                 </ul>
-                <div class="quick-links">
-                    <span>Quick Actions:</span>
-                    <a href="/courses/form" target="_blank">+ Add New Course</a>
-                    <a href="/courses" target="_blank">View All Courses</a>
-                </div>
             </div>
 
             <div class="button-group">

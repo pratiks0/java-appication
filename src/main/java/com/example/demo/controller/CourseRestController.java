@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.dto.CourseDto;
 import com.example.demo.entity.Course;
 import com.example.demo.service.CourseService;
 
@@ -24,15 +24,16 @@ public class CourseRestController {
 
     /**
      * Get all courses
+     * Everyone (ADMIN + USER) can view
      */
     @GetMapping
     public ResponseEntity<List<Course>> getAllCourses() {
-        List<Course> courses = courseService.getAllCourses();
-        return ResponseEntity.ok(courses);
+        return ResponseEntity.ok(courseService.getAllCourses());
     }
 
     /**
      * Get course by ID
+     * Everyone (ADMIN + USER) can view
      */
     @GetMapping("/{id}")
     public ResponseEntity<Course> getCourseById(@PathVariable Long id) {
@@ -42,32 +43,35 @@ public class CourseRestController {
 
     /**
      * Create new course
+     * ADMIN ONLY
      */
     @PostMapping
-    public ResponseEntity<Course> createCourse(@Valid @RequestBody CourseDto dto) {
-        Course course = new Course();
-        course.setTitle(dto.getTitle());
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Course> createCourse(@Valid @RequestBody Course course) {
         Course savedCourse = courseService.saveCourse(course);
-        return new ResponseEntity<>(savedCourse, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedCourse);
     }
 
     /**
-     * Update course
+     * Update existing course
+     * ADMIN ONLY
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Course> updateCourse(
-            @PathVariable Long id,
-            @Valid @RequestBody CourseDto dto) {
-        Course course = new Course();
-        course.setTitle(dto.getTitle());
-        Course updatedCourse = courseService.updateCourse(id, course);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Course> updateCourse(@PathVariable Long id, 
+                                               @Valid @RequestBody Course course) {
+        Course existingCourse = courseService.getCourseById(id);
+        existingCourse.setTitle(course.getTitle());
+        Course updatedCourse = courseService.saveCourse(existingCourse);
         return ResponseEntity.ok(updatedCourse);
     }
 
     /**
      * Delete course
+     * ADMIN ONLY
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteCourse(@PathVariable Long id) {
         courseService.deleteCourse(id);
         return ResponseEntity.noContent().build();

@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import com.example.demo.dto.DepartmentDto;
 import com.example.demo.entity.Department;
 import com.example.demo.service.DepartmentService;
 
@@ -24,15 +24,16 @@ public class DepartmentRestController {
 
     /**
      * Get all departments
+     * Everyone (ADMIN + USER) can view
      */
     @GetMapping
     public ResponseEntity<List<Department>> getAllDepartments() {
-        List<Department> departments = departmentService.getAllDepartments();
-        return ResponseEntity.ok(departments);
+        return ResponseEntity.ok(departmentService.getAllDepartments());
     }
 
     /**
      * Get department by ID
+     * Everyone (ADMIN + USER) can view
      */
     @GetMapping("/{id}")
     public ResponseEntity<Department> getDepartmentById(@PathVariable Long id) {
@@ -42,32 +43,35 @@ public class DepartmentRestController {
 
     /**
      * Create new department
+     * ADMIN ONLY
      */
     @PostMapping
-    public ResponseEntity<Department> createDepartment(@Valid @RequestBody DepartmentDto dto) {
-        Department department = new Department();
-        department.setName(dto.getName());
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Department> createDepartment(@Valid @RequestBody Department department) {
         Department savedDepartment = departmentService.saveDepartment(department);
-        return new ResponseEntity<>(savedDepartment, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedDepartment);
     }
 
     /**
-     * Update department
+     * Update existing department
+     * ADMIN ONLY
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Department> updateDepartment(
-            @PathVariable Long id,
-            @Valid @RequestBody DepartmentDto dto) {
-        Department department = new Department();
-        department.setName(dto.getName());
-        Department updatedDepartment = departmentService.updateDepartment(id, department);
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Department> updateDepartment(@PathVariable Long id, 
+                                                       @Valid @RequestBody Department department) {
+        Department existingDepartment = departmentService.getDepartmentById(id);
+        existingDepartment.setName(department.getName());
+        Department updatedDepartment = departmentService.saveDepartment(existingDepartment);
         return ResponseEntity.ok(updatedDepartment);
     }
 
     /**
      * Delete department
+     * ADMIN ONLY
      */
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteDepartment(@PathVariable Long id) {
         departmentService.deleteDepartment(id);
         return ResponseEntity.noContent().build();

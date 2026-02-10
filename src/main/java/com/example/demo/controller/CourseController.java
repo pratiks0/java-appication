@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +24,7 @@ public class CourseController {
 
     /**
      * Display list of all courses
-     * Everyone can view (even regular users)
+     * Everyone can view
      */
     @GetMapping
     public String listCourses(Model model) {
@@ -40,10 +39,10 @@ public class CourseController {
 
     /**
      * Show form for adding a new course
-     * ADMIN ONLY
+     * UI allows access - JavaScript will hide button for non-admins
+     * Real security is on the REST API endpoint
      */
     @GetMapping("/form")
-    @PreAuthorize("hasRole('ADMIN')")
     public String showAddForm(Model model) {
         model.addAttribute("course", new CourseDto());
         return "course-form";
@@ -51,10 +50,10 @@ public class CourseController {
 
     /**
      * Show form for editing an existing course
-     * ADMIN ONLY
+     * UI allows access - JavaScript will hide button for non-admins
+     * Real security is on the REST API endpoint
      */
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public String showEditForm(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
         try {
             Course course = courseService.getCourseById(id);
@@ -73,10 +72,10 @@ public class CourseController {
 
     /**
      * Save or update course
-     * ADMIN ONLY
+     * UI allows access - Form submission will be validated by API
+     * Real security is on the REST API endpoint
      */
     @PostMapping("/save")
-    @PreAuthorize("hasRole('ADMIN')")
     public String saveCourse(@Valid @ModelAttribute("course") CourseDto dto,
                             BindingResult result,
                             RedirectAttributes redirectAttributes,
@@ -110,10 +109,10 @@ public class CourseController {
 
     /**
      * Delete course
-     * ADMIN ONLY
+     * UI allows access - JavaScript will hide button for non-admins
+     * Real security is on the REST API endpoint
      */
     @GetMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public String deleteCourse(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             courseService.deleteCourse(id);

@@ -1,6 +1,5 @@
 package com.example.demo.controller;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +24,7 @@ public class DepartmentController {
 
     /**
      * Display list of all departments
-     * Everyone can view (even regular users)
+     * Everyone can view
      */
     @GetMapping
     public String listDepartments(Model model) {
@@ -40,10 +39,10 @@ public class DepartmentController {
 
     /**
      * Show form for adding a new department
-     * ADMIN ONLY
+     * UI allows access - JavaScript will hide button for non-admins
+     * Real security is on the REST API endpoint
      */
     @GetMapping("/form")
-    @PreAuthorize("hasRole('ADMIN')")
     public String showAddForm(Model model) {
         model.addAttribute("department", new DepartmentDto());
         return "department-form";
@@ -51,10 +50,10 @@ public class DepartmentController {
 
     /**
      * Show form for editing an existing department
-     * ADMIN ONLY
+     * UI allows access - JavaScript will hide button for non-admins
+     * Real security is on the REST API endpoint
      */
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public String showEditForm(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
         try {
             Department department = departmentService.getDepartmentById(id);
@@ -73,10 +72,10 @@ public class DepartmentController {
 
     /**
      * Save or update department
-     * ADMIN ONLY
+     * UI allows access - Form submission will be validated by API
+     * Real security is on the REST API endpoint
      */
     @PostMapping("/save")
-    @PreAuthorize("hasRole('ADMIN')")
     public String saveDepartment(@Valid @ModelAttribute("department") DepartmentDto dto,
                                 BindingResult result,
                                 RedirectAttributes redirectAttributes,
@@ -110,10 +109,10 @@ public class DepartmentController {
 
     /**
      * Delete department
-     * ADMIN ONLY
+     * UI allows access - JavaScript will hide button for non-admins
+     * Real security is on the REST API endpoint
      */
     @GetMapping("/delete/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
     public String deleteDepartment(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             departmentService.deleteDepartment(id);

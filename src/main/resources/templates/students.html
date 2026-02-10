@@ -5,274 +5,344 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Students - Student Management System</title>
     <style>
-		* {
-		           margin: 0;
-		           padding: 0;
-		           box-sizing: border-box;
-		       }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-		       body {
-		           font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-		           background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-		           min-height: 100vh;
-		           padding: 40px 20px;
-		           color: #e2e8f0;
-		       }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #e2e8f0;
+        }
 
-		       .container {
-		           max-width: 1400px;
-		           margin: 0 auto;
-		           background: rgba(30, 41, 59, 0.6);
-		           backdrop-filter: blur(20px);
-		           border: 1px solid rgba(148, 163, 184, 0.1);
-		           padding: 48px;
-		           border-radius: 24px;
-		           box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-		       }
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 16px 32px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            flex-wrap: wrap;
+            gap: 16px;
+        }
 
-		       .header {
-		           display: flex;
-		           justify-content: space-between;
-		           align-items: center;
-		           margin-bottom: 40px;
-		           flex-wrap: wrap;
-		           gap: 20px;
-		       }
+        .navbar h1 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #f1f5f9;
+            letter-spacing: -0.01em;
+        }
 
-		       h2 {
-		           font-size: 32px;
-		           font-weight: 600;
-		           color: #f1f5f9;
-		           letter-spacing: -0.02em;
-		       }
+        .navbar-user {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 14px;
+            color: #cbd5e1;
+        }
 
-		       .header-actions {
-		           display: flex;
-		           gap: 12px;
-		           align-items: center;
-		           flex-wrap: wrap;
-		       }
+        .navbar-user a {
+            color: #60a5fa;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
 
-		       .nav-links {
-		           display: flex;
-		           gap: 8px;
-		           background: rgba(15, 23, 42, 0.4);
-		           padding: 6px;
-		           border-radius: 12px;
-		           border: 1px solid rgba(148, 163, 184, 0.1);
-		       }
+        .navbar-user a:hover {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+        }
 
-		       .nav-link {
-		           color: #cbd5e1;
-		           padding: 10px 20px;
-		           text-decoration: none;
-		           border-radius: 8px;
-		           font-size: 14px;
-		           font-weight: 500;
-		           transition: all 0.3s ease;
-		       }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(30, 41, 59, 0.6);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+            padding: 48px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
 
-		       .nav-link:hover {
-		           background: rgba(59, 130, 246, 0.1);
-		           color: #93c5fd;
-		       }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
 
-		       .nav-link[style*="background-color: #4CAF50"] {
-		           background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%) !important;
-		           color: white;
-		       }
+        h2 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #f1f5f9;
+            letter-spacing: -0.02em;
+        }
 
-		       .add-button {
-		           background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
-		           color: white;
-		           padding: 12px 24px;
-		           text-decoration: none;
-		           border-radius: 12px;
-		           font-weight: 600;
-		           font-size: 14px;
-		           transition: all 0.3s ease;
-		           box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
-		       }
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-		       .add-button:hover {
-		           transform: translateY(-2px);
-		           box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-		       }
+        .nav-links {
+            display: flex;
+            gap: 8px;
+            background: rgba(15, 23, 42, 0.4);
+            padding: 6px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
 
-		       .message {
-		           padding: 16px 20px;
-		           border-radius: 12px;
-		           margin-bottom: 24px;
-		           font-size: 14px;
-		           border: 1px solid;
-		       }
+        .nav-link {
+            color: #cbd5e1;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
 
-		       .success {
-		           background: rgba(16, 185, 129, 0.1);
-		           color: #6ee7b7;
-		           border-color: rgba(16, 185, 129, 0.3);
-		       }
+        .nav-link:hover {
+            background: rgba(59, 130, 246, 0.1);
+            color: #93c5fd;
+        }
 
-		       .error {
-		           background: rgba(239, 68, 68, 0.1);
-		           color: #fca5a5;
-		           border-color: rgba(239, 68, 68, 0.3);
-		       }
+        .nav-link.active {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+        }
 
-		       table {
-		           width: 100%;
-		           border-collapse: separate;
-		           border-spacing: 0;
-		           margin-top: 24px;
-		       }
+        .add-button {
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: white;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
 
-		       th {
-		           background: rgba(15, 23, 42, 0.5);
-		           color: #cbd5e1;
-		           padding: 16px 20px;
-		           text-align: left;
-		           font-weight: 600;
-		           font-size: 13px;
-		           text-transform: uppercase;
-		           letter-spacing: 0.05em;
-		           border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-		       }
+        .add-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
 
-		       th:first-child {
-		           border-top-left-radius: 12px;
-		       }
+        .message {
+            padding: 16px 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            border: 1px solid;
+        }
 
-		       th:last-child {
-		           border-top-right-radius: 12px;
-		       }
+        .success {
+            background: rgba(16, 185, 129, 0.1);
+            color: #6ee7b7;
+            border-color: rgba(16, 185, 129, 0.3);
+        }
 
-		       td {
-		           padding: 20px;
-		           border-bottom: 1px solid rgba(148, 163, 184, 0.1);
-		           color: #e2e8f0;
-		           font-size: 14px;
-		       }
+        .error {
+            background: rgba(239, 68, 68, 0.1);
+            color: #fca5a5;
+            border-color: rgba(239, 68, 68, 0.3);
+        }
 
-		       tr {
-		           transition: background-color 0.2s ease;
-		       }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 24px;
+        }
 
-		       tr:hover {
-		           background: rgba(59, 130, 246, 0.05);
-		       }
+        th {
+            background: rgba(15, 23, 42, 0.5);
+            color: #cbd5e1;
+            padding: 16px 20px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+        }
 
-		       tr:last-child td:first-child {
-		           border-bottom-left-radius: 12px;
-		       }
+        th:first-child {
+            border-top-left-radius: 12px;
+        }
 
-		       tr:last-child td:last-child {
-		           border-bottom-right-radius: 12px;
-		       }
+        th:last-child {
+            border-top-right-radius: 12px;
+        }
 
-		       .action-links {
-		           display: flex;
-		           gap: 16px;
-		       }
+        td {
+            padding: 20px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.1);
+            color: #e2e8f0;
+            font-size: 14px;
+        }
 
-		       .action-links a {
-		           text-decoration: none;
-		           color: #60a5fa;
-		           font-weight: 500;
-		           font-size: 14px;
-		           transition: all 0.2s ease;
-		       }
+        tr {
+            transition: background-color 0.2s ease;
+        }
 
-		       .action-links a:hover {
-		           color: #93c5fd;
-		       }
+        tr:hover {
+            background: rgba(59, 130, 246, 0.05);
+        }
 
-		       .action-links a.delete {
-		           color: #f87171;
-		       }
+        tr:last-child td:first-child {
+            border-bottom-left-radius: 12px;
+        }
 
-		       .action-links a.delete:hover {
-		           color: #fca5a5;
-		       }
+        tr:last-child td:last-child {
+            border-bottom-right-radius: 12px;
+        }
 
-		       .badge {
-		           background: rgba(59, 130, 246, 0.15);
-		           color: #93c5fd;
-		           padding: 6px 10px;
-		           border-radius: 6px;
-		           font-size: 12px;
-		           font-weight: 500;
-		           display: inline-block;
-		           margin-right: 6px;
-		           margin-bottom: 4px;
-		       }
+        .action-links {
+            display: flex;
+            gap: 16px;
+        }
 
-		       .no-data {
-		           text-align: center;
-		           padding: 80px 40px;
-		           color: #94a3b8;
-		       }
+        .action-links a {
+            text-decoration: none;
+            color: #60a5fa;
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
 
-		       .no-data p {
-		           font-size: 16px;
-		           line-height: 1.6;
-		           margin-bottom: 12px;
-		       }
+        .action-links a:hover {
+            color: #93c5fd;
+        }
 
-		       .no-data a {
-		           color: #60a5fa;
-		           text-decoration: none;
-		           transition: color 0.2s ease;
-		       }
+        .action-links a.delete {
+            color: #f87171;
+        }
 
-		       .no-data a:hover {
-		           color: #93c5fd;
-		       }
+        .action-links a.delete:hover {
+            color: #fca5a5;
+        }
 
-		       @media (max-width: 768px) {
-		           .container {
-		               padding: 32px 24px;
-		           }
+        .badge {
+            background: rgba(59, 130, 246, 0.15);
+            color: #93c5fd;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            display: inline-block;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
 
-		           h2 {
-		               font-size: 24px;
-		           }
+        .no-data {
+            text-align: center;
+            padding: 80px 40px;
+            color: #94a3b8;
+        }
 
-		           .header {
-		               flex-direction: column;
-		               align-items: flex-start;
-		           }
+        .no-data p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
 
-		           .nav-links {
-		               width: 100%;
-		               flex-direction: column;
-		           }
+        .no-data a {
+            color: #60a5fa;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
 
-		           .nav-link {
-		               width: 100%;
-		               text-align: center;
-		           }
+        .no-data a:hover {
+            color: #93c5fd;
+        }
 
-		           table {
-		               font-size: 13px;
-		           }
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 12px 20px;
+            }
 
-		           th, td {
-		               padding: 12px;
-		           }
-		       }
+            .navbar h1 {
+                font-size: 16px;
+            }
+
+            .navbar-user {
+                width: 100%;
+                justify-content: space-between;
+                font-size: 13px;
+            }
+
+            .container {
+                padding: 32px 24px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .header-actions {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .nav-links {
+                width: 100%;
+                flex-direction: column;
+            }
+
+            .nav-link {
+                width: 100%;
+                text-align: center;
+            }
+
+            .add-button {
+                width: 100%;
+                text-align: center;
+            }
+
+            table {
+                font-size: 13px;
+            }
+
+            th, td {
+                padding: 12px;
+            }
+
+            .action-links {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .action-links a {
+                display: inline-block;
+            }
+        }
     </style>
 </head>
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
-        <h1>👨‍🎓 Student Management System</h1>
-        
-        <div class="nav-links">
-            <a href="/students">👥 Students</a>
-            <a href="/departments">🏢 Departments</a>
-            <a href="/courses">📚 Courses</a>
-        </div>
-
+        <h1>Student Management System</h1>
         <div class="navbar-user" id="navbar-user">
             <!-- User info will be injected by auth.js -->
         </div>
@@ -281,64 +351,61 @@
     <!-- Main Container -->
     <div class="container">
         <div class="header">
-            <h2>Students List</h2>
-            <a href="/students/form" class="btn btn-primary">+ Add New Student</a>
+            <h2>Students</h2>
+            <div class="header-actions">
+                <div class="nav-links">
+                    <a href="/students" class="nav-link active">Students</a>
+                    <a href="/departments" class="nav-link">Departments</a>
+                    <a href="/courses" class="nav-link">Courses</a>
+                </div>
+                <a href="/students/form" class="add-button">+ Add New Student</a>
+            </div>
         </div>
 
-        <!-- Success/Error Messages -->
-        <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
-        <div th:if="${errorMessage}" class="alert alert-error" th:text="${errorMessage}"></div>
+        <div th:if="${successMessage}" class="message success" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="message error" th:text="${errorMessage}"></div>
 
-        <!-- Students Table -->
-        <div th:if="${students != null and !students.isEmpty()}">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Department</th>
-                        <th>Courses</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr th:each="student : ${students}">
-                        <td th:text="${student.id}">1</td>
-                        <td th:text="${student.name}">John Doe</td>
-                        <td th:text="${student.email}">john@example.com</td>
-                        <td th:text="${student.department != null ? student.department.name : 'N/A'}">Computer Science</td>
-                        <td>
-                            <span th:if="${student.courses != null and !student.courses.isEmpty()}">
-                                <span th:each="course, iterStat : ${student.courses}">
-                                    <span th:text="${course.title}">Course</span>
-                                    <span th:unless="${iterStat.last}">, </span>
-                                </span>
-                            </span>
-                            <span th:unless="${student.courses != null and !student.courses.isEmpty()}">No courses</span>
-                        </td>
-                        <td>
-                            <div class="actions">
-                                <a th:href="@{/students/edit/{id}(id=${student.id})}" 
-                                   class="btn btn-primary" style="font-size: 12px; padding: 6px 12px;">Edit</a>
-                                <a th:href="@{/students/delete/{id}(id=${student.id})}" 
-                                   class="btn btn-danger" style="font-size: 12px; padding: 6px 12px;"
-                                   onclick="return confirm('Are you sure you want to delete this student?');">Delete</a>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <table th:if="${students != null and !students.isEmpty()}">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Department</th>
+                    <th>Courses</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="student : ${students}">
+                    <td th:text="${student.id}">1</td>
+                    <td th:text="${student.name}">John Doe</td>
+                    <td th:text="${student.email}">john@example.com</td>
+                    <td th:text="${student.department != null ? student.department.name : 'N/A'}">Computer Science</td>
+                    <td>
+                        <span th:if="${student.courses != null and !student.courses.isEmpty()}">
+                            <span th:each="course : ${student.courses}" class="badge" th:text="${course.title}">Course</span>
+                        </span>
+                        <span th:unless="${student.courses != null and !student.courses.isEmpty()}">No courses</span>
+                    </td>
+                    <td class="action-links">
+                        <a th:href="@{/students/edit/{id}(id=${student.id})}">Edit</a>
+                        <a th:href="@{/students/delete/{id}(id=${student.id})}"
+                           class="delete"
+                           onclick="return confirm('Are you sure you want to delete this student?')">
+                            Delete
+                        </a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
 
-        <!-- Empty State -->
-        <div th:if="${students == null or students.isEmpty()}" class="empty-state">
-            <h3>No students found</h3>
-            <p>Click "Add New Student" to get started!</p>
+        <div th:if="${students == null or students.isEmpty()}" class="no-data">
+            <p>No students found. Click "Add New Student" to get started!</p>
             <p style="margin-top: 15px;">
                 💡 <strong>Tip:</strong> You may want to create 
-                <a href="/departments" style="color: #4CAF50;">departments</a> and 
-                <a href="/courses" style="color: #4CAF50;">courses</a> first!
+                <a href="/departments">departments</a> and 
+                <a href="/courses">courses</a> first!
             </p>
         </div>
     </div>

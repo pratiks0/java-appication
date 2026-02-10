@@ -10,6 +10,50 @@
             padding: 0;
             box-sizing: border-box;
         }
+		
+		.navbar {
+		            display: flex;
+		            justify-content: space-between;
+		            align-items: center;
+		            background: rgba(30, 41, 59, 0.6);
+		            backdrop-filter: blur(20px);
+		            border: 1px solid rgba(148, 163, 184, 0.1);
+		            padding: 16px 32px;
+		            border-radius: 16px;
+		            margin-bottom: 24px;
+		            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+		            flex-wrap: wrap;
+		            gap: 16px;
+		        }
+
+		        .navbar h1 {
+		            font-size: 20px;
+		            font-weight: 600;
+		            color: #f1f5f9;
+		            letter-spacing: -0.01em;
+		        }
+
+		        .navbar-user {
+		            display: flex;
+		            align-items: center;
+		            gap: 16px;
+		            font-size: 14px;
+		            color: #cbd5e1;
+		        }
+
+		        .navbar-user a {
+		            color: #60a5fa;
+		            text-decoration: none;
+		            font-weight: 500;
+		            padding: 8px 16px;
+		            border-radius: 8px;
+		            transition: all 0.2s ease;
+		        }
+
+		        .navbar-user a:hover {
+		            background: rgba(59, 130, 246, 0.15);
+		            color: #93c5fd;
+		        }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
@@ -250,6 +294,13 @@
     </style>
 </head>
 <body>
+	<!-- Navigation Bar -->
+	    <div class="navbar">
+	        <h1>Student Management System</h1>
+	        <div class="navbar-user" id="navbar-user">
+	            <!-- User info will be injected by auth.js -->
+	        </div>
+	    </div>
     <div class="container">
         <div class="header">
             <h2>Course Management</h2>
